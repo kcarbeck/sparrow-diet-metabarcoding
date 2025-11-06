@@ -25,7 +25,7 @@ outdir_2025=$WORK_DIR/Mandarte_diet_2025
 
 # 2024
 qiime dada2 denoise-paired \
-  --i-demultiplexed-seqs $outdir_2024/trim_plate1_2024.qza \
+  --i-demultiplexed-seqs $outdir_2024/trimmed_plate1_2024.qza \
   --p-trunc-len-f 130 \
   --p-trunc-len-r 130 \
   --p-trim-left-f 0 \
@@ -38,7 +38,7 @@ qiime dada2 denoise-paired \
 
 # 2025
 qiime dada2 denoise-paired \
-  --i-demultiplexed-seqs $outdir_2025/trim_plate1_2025.qza \
+  --i-demultiplexed-seqs $outdir_2025/trimmed_plate1_2025.qza \
   --p-trunc-len-f 130 \
   --p-trunc-len-r 130 \
   --p-trim-left-f 0 \
