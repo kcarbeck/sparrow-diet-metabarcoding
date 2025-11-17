@@ -28,8 +28,8 @@ qiime dada2 denoise-paired \
   --i-demultiplexed-seqs $outdir_2024/trimmed_plate1_2024.qza \
   --p-trunc-len-f 130 \
   --p-trunc-len-r 130 \
-  --p-trim-left-f 0 \
-  --p-trim-left-r 0 \
+  --p-trim-left-f 1 \
+  --p-trim-left-r 1 \
   --p-min-overlap 20 \
   --p-n-threads 22 \
   --o-representative-sequences $outdir_2024/rep-seqs_plate1_2024.qza \
@@ -41,8 +41,8 @@ qiime dada2 denoise-paired \
   --i-demultiplexed-seqs $outdir_2025/trimmed_plate1_2025.qza \
   --p-trunc-len-f 130 \
   --p-trunc-len-r 130 \
-  --p-trim-left-f 0 \
-  --p-trim-left-r 0 \
+  --p-trim-left-f 1 \
+  --p-trim-left-r 1 \
   --p-min-overlap 20 \
   --p-n-threads 22 \
   --o-representative-sequences $outdir_2025/rep-seqs_plate1_2025.qza \
@@ -102,3 +102,32 @@ qiime feature-table tabulate-seqs\
    --i-data $outdir_2025/rep-seqs_plate1_2025.qza\
    --o-visualization $outdir_2025/rep-seqs_plate1_2025.qzv
 # see sequences and the distribution of seq lengths. should center near your target amplicon length (180 bp). each seq should be a link to blast against ncbi
+
+##############################################################################
+#*                 SANITY CHECK:check sequence lengths
+##############################################################################
+# 2024
+qiime tools export \
+  --input-path $outdir_2024/rep-seqs_plate1_2024.qza \
+  --output-path $outdir_2024/repseqs_export_2024
+
+# cd to the export directory and check the distribution of sequence lengths
+awk '/^>/{next}{print length($0)}' dna-sequences.fasta \
+| sort -n | awk '{a[++n]=$1} END{printf("min=%d p1=%d median=%d p99=%d max=%d\n",a[1],a[int(0.01*n)],a[int(0.5*n)],a[int(0.99*n)],a[n])}'
+
+awk '/^>/{next}{print length($0)}' dna-sequences.fasta \
+  | sort -n | uniq -c
+
+
+#2025
+qiime tools export \
+  --input-path $outdir_2025/rep-seqs_plate1_2025.qza \
+  --output-path $outdir_2025/repseqs_export_2025
+
+# cd to the export directory and check the distribution of sequence lengths
+awk '/^>/{next}{print length($0)}' dna-sequences.fasta \
+| sort -n | awk '{a[++n]=$1} END{printf("min=%d p1=%d median=%d p99=%d max=%d\n",a[1],a[int(0.01*n)],a[int(0.5*n)],a[int(0.99*n)],a[n])}'
+
+awk '/^>/{next}{print length($0)}' dna-sequences.fasta \
+  | sort -n | uniq -c
+

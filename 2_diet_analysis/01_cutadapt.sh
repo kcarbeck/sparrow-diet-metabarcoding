@@ -16,25 +16,34 @@ mkdir -p $outdir_2025/logs
 ##############################################################################
 #*                cutadapt trimming
 ##############################################################################
-# 2024
+
+# using anywhere flag because for some reason the primers are preceeded by different bases in different samples, which means we weren't able to trim everyhting and were getting ASVs that were too long.
+#previous run:
+#  --p-front-f    GGTCAACAAATCATAAAGATATTGG \
+#  --p-front-r    GGWACTAATCAATTTCCAAATCC \
+#  --p-adapter-f  GGATTTGGAAATTGATTAGTWCC \
+#  --p-adapter-r  CCAATATCTTTATGATTTGTTGACC \
+
+# # 2024
 qiime cutadapt trim-paired \
-  --i-demultiplexed-sequences $outdir_2024/demux_plate1_2024.qza \
-  --p-front-f    GGTCAACAAATCATAAAGATATTGG \
-  --p-front-r    GGWACTAATCAATTTCCAAATCC \
-  --p-adapter-f  GGATTTGGAAATTGATTAGTWCC \
-  --p-adapter-r  CCAATATCTTTATGATTTGTTGACC \
+  --i-demultiplexed-sequences $outdir_2024/trimmed_plate1_2024.qza \
+  --p-anywhere-f GGTCAACAAATCATAAAGATATTGG \
+  --p-anywhere-f GGATTTGGAAATTGATTAGTWCC \
+  --p-anywhere-r GGWACTAATCAATTTCCAAATCC \
+  --p-anywhere-r CCAATATCTTTATGATTTGTTGACC \
   --p-match-adapter-wildcards \
   --p-match-read-wildcards \
   --p-cores 11 \
   --o-trimmed-sequences $outdir_2024/trimmed_plate1_2024.qza \
-  --verbose > $outdir_2024/logs/cutadapt_out_plate1_2024.log &
+  --verbose > $outdir_2024/logs/cutadapt_out_plate1_2024_anywhere.log &
 
+# 2025
   qiime cutadapt trim-paired \
   --i-demultiplexed-sequences $outdir_2025/demux_plate1_2025.qza \
-  --p-front-f    GGTCAACAAATCATAAAGATATTGG \
-  --p-front-r    GGWACTAATCAATTTCCAAATCC \
-  --p-adapter-f  GGATTTGGAAATTGATTAGTWCC \
-  --p-adapter-r  CCAATATCTTTATGATTTGTTGACC \
+  --p-anywhere-f GGTCAACAAATCATAAAGATATTGG \
+  --p-anywhere-f GGATTTGGAAATTGATTAGTWCC \
+  --p-anywhere-r GGWACTAATCAATTTCCAAATCC \
+  --p-anywhere-r CCAATATCTTTATGATTTGTTGACC \
   --p-match-adapter-wildcards \
   --p-match-read-wildcards \
   --p-cores 11 \
@@ -59,3 +68,4 @@ qiime demux summarize \
 # How much of the total sequence do we need to preserve and still have a sufficient overlap to merge the paired end reads?
 # How much of the poor quality sequence can we truncate before trying to merge?
 
+# truncate 1 bp from the ends of reads to get rid of that extra base before primers..

@@ -30,6 +30,23 @@ qiime feature-table merge-seqs \
   --i-data $outdir_2025/rep-seqs_plate1_2025.qza \
   --o-merged-data $outdir_merged/rep-seqs_merged.qza
 
+qiime feature-table tabulate-seqs \
+  --i-data $outdir_merged/rep-seqs_merged.qza \
+  --o-visualization $outdir_merged/rep-seqs_merged.qzv
+
+### sanity check: check the distribution of sequence lengths ###
+qiime tools export \
+  --input-path $outdir_merged/rep-seqs_merged.qza \
+  --output-path $outdir_merged/repseqs_export_merged
+
+# cd to the export directory and check the distribution of sequence lengths
+awk '/^>/{next}{print length($0)}' dna-sequences.fasta \
+| sort -n | awk '{a[++n]=$1} END{printf("min=%d p1=%d median=%d p99=%d max=%d\n",a[1],a[int(0.01*n)],a[int(0.5*n)],a[int(0.99*n)],a[n])}'
+
+awk '/^>/{next}{print length($0)}' dna-sequences.fasta \
+  | sort -n | uniq -c
+
+
 ####----------------------        merge metadata        ----------------------------####
 # make a merged metadata artifact
 # NOTE on metadata files and alignment with tables:
@@ -57,7 +74,6 @@ qiime tools export \
   --input-path $outdir_merged/metadata_merged.qza \
   --output-path $outdir_merged
 # ^ this should create a metadata.tsv file in the output directory
-
 
 # summarize per-sample info:
 qiime feature-table summarize \
