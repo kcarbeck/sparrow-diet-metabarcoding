@@ -24,9 +24,9 @@ mkdir -p $outdir_2025/logs
 #  --p-adapter-f  GGATTTGGAAATTGATTAGTWCC \
 #  --p-adapter-r  CCAATATCTTTATGATTTGTTGACC \
 
-# # 2024
+# 2024
 qiime cutadapt trim-paired \
-  --i-demultiplexed-sequences $outdir_2024/trimmed_plate1_2024.qza \
+  --i-demultiplexed-sequences $outdir_2024/demux_plate1_2024.qza \
   --p-anywhere-f GGTCAACAAATCATAAAGATATTGG \
   --p-anywhere-f GGATTTGGAAATTGATTAGTWCC \
   --p-anywhere-r GGWACTAATCAATTTCCAAATCC \
